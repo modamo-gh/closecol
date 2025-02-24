@@ -1,54 +1,105 @@
 import { useColor } from "@/context/ColorContext";
 import { useImageColor } from "@/hooks/useImageColor";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useRef } from "react";
-import { Text, View } from "react-native";
-import Canvas from "react-native-canvas";
+import React, { useEffect, useRef, useState } from "react";
+import { SafeAreaView, Text, View } from "react-native";
+import { Canvas, Image, Rect, useCanvasRef } from "@shopify/react-native-skia";
 
 const AnalysisScreen = () => {
 	const { targetColor } = useColor();
 
 	const { uri } = useLocalSearchParams();
 
-	const { averageColor, extractColor } = useImageColor();
-	const canvasRef = useRef(null)
+	const { averageColor, extractColor, skiaImage } = useImageColor();
+	const ref = useCanvasRef();
+
+	const [canvasSize, setCanvasSize] = useState({ height: 0, width: 0 });
+
+	const onCanvasLayout = (event) => {
+		const { height, width } = event.nativeEvent.layout;
+
+		setCanvasSize({ height, width });
+
+		console.log({ height, width });
+	};
 
 	useEffect(() => {
 		if (uri) {
-			extractColor(Array.isArray(uri) ? uri[0] : uri, canvasRef)
+			extractColor(uri, ref);
 		}
 	}, [uri]);
 
-	console.log(averageColor)
+	const fontColor = [
+		targetColor.red,
+		targetColor.green,
+		targetColor.blue
+	].some((value) => value > Math.floor(255 / 2))
+		? "#000000"
+		: "#FFFFFF";
+
+	const color = `rgb(${targetColor.red}, ${targetColor.green}, ${targetColor.blue})`;
 
 	return (
-		<View style={{ backgroundColor: "orange", flex: 1 }}>
-			<Text
-				style={{ fontSize: 20, color: "#FFFFFF" }}
-			>{`Today's Color: #${targetColor.red
-				.toString(16)
-				.padStart(2, "0")
-				.toUpperCase()}${targetColor.green
+		<SafeAreaView style={{ backgroundColor: "purple", flex: 1, gap: 16 }}>
+			<View
+				style={{
+					backgroundColor: color,
+					flex: 1,
+					borderRadius: 8,
+					marginHorizontal: 8,
+					alignItems: "center",
+					justifyContent: "center"
+				}}
+			>
+				<Text
+					style={{ fontSize: 20, color: fontColor }}
+				>{`Today's Color: #${targetColor.red
+					.toString(16)
+					.padStart(2, "0")
+					.toUpperCase()}${targetColor.green
 					.toString(16)
 					.padStart(2, "0")
 					.toUpperCase()}${targetColor.blue
-						.toString(16)
-						.padStart(2, "0")
-						.toUpperCase()}`}</Text>
-			<Canvas ref={canvasRef} style={{ width: 1, height: 1, opacity: 0 }} />
-			{averageColor ? (
-				<Text style={{ fontSize: 20, color: "#FFFFFF", marginTop: 10 }}>
-					Extracted Color: #
-					{averageColor.red.toString(16).padStart(2, "0").toUpperCase()}
-					{averageColor.green.toString(16).padStart(2, "0").toUpperCase()}
-					{averageColor.blue.toString(16).padStart(2, "0").toUpperCase()}
-				</Text>
-			) : (
-				<Text style={{ fontSize: 18, color: "#FFFFFF", marginTop: 10 }}>
-					Extracting color...
-				</Text>
-			)}
-		</View>
+					.toString(16)
+					.padStart(2, "0")
+					.toUpperCase()}`}</Text>
+			</View>
+			<View
+				style={{
+					backgroundColor: "green",
+					flex: 1,
+					borderRadius: 8,
+					marginHorizontal: 8
+				}}
+			/>
+			<View
+				style={{
+					backgroundColor: "blue",
+					flex: 8,
+					borderRadius: 8,
+					marginHorizontal: 8,
+					overflow: "hidden"
+				}}
+			>
+				<Canvas
+					onLayout={onCanvasLayout}
+					ref={ref}
+					style={{
+						flex: 1
+					}}
+				>
+					{skiaImage && (
+						<Image
+							image={skiaImage}
+							height={canvasSize.height}
+							width={canvasSize.width}
+							x={0}
+							y={0}
+						/>
+					)}
+				</Canvas>
+			</View>
+		</SafeAreaView>
 	);
 };
 
