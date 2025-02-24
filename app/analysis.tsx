@@ -39,6 +39,8 @@ const AnalysisScreen = () => {
 
 	const color = `rgb(${targetColor.red}, ${targetColor.green}, ${targetColor.blue})`;
 
+	const userColor = `rgb(${averageColor?.red}, ${averageColor?.green}, ${averageColor?.blue})`;
+
 	return (
 		<SafeAreaView style={{ backgroundColor: "purple", flex: 1, gap: 16 }}>
 			<View
@@ -66,12 +68,27 @@ const AnalysisScreen = () => {
 			</View>
 			<View
 				style={{
-					backgroundColor: "green",
+					backgroundColor: userColor,
 					flex: 1,
 					borderRadius: 8,
-					marginHorizontal: 8
+					marginHorizontal: 8,
+					alignItems: "center",
+					justifyContent: "center"
 				}}
-			/>
+			>
+				<Text
+					style={{ fontSize: 20, color: fontColor }}
+				>{`Your Avg Color: #${averageColor?.red
+					.toString(16)
+					.padStart(2, "0")
+					.toUpperCase()}${averageColor?.green
+					.toString(16)
+					.padStart(2, "0")
+					.toUpperCase()}${averageColor?.blue
+					.toString(16)
+					.padStart(2, "0")
+					.toUpperCase()}`}</Text>
+			</View>
 			<View
 				style={{
 					backgroundColor: "blue",
