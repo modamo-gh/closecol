@@ -1,10 +1,19 @@
 import CameraViewfinder from "@/components/CameraViewfinder";
+import { useEffect } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "expo-router";
 
 export default function HomeScreen() {
+	const navigation = useNavigation();
+
 	const red = Math.floor(Math.random() * 255);
 	const green = Math.floor(Math.random() * 255);
 	const blue = Math.floor(Math.random() * 255);
+
+	useEffect(() => {
+		navigation.setOptions({ tabBarStyle: { display: "none" } });
+		return () => navigation.setOptions({ tabBarStyle: undefined });
+	}, []);
 
 	return (
 		<SafeAreaView style={{ backgroundColor: "purple", flex: 1, gap: 16 }}>
@@ -42,7 +51,8 @@ export default function HomeScreen() {
 					backgroundColor: "blue",
 					flex: 8,
 					borderRadius: 8,
-					marginHorizontal: 8
+					marginHorizontal: 8,
+					overflow: "hidden"
 				}}
 			>
 				<CameraViewfinder />
