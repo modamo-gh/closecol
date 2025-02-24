@@ -74,7 +74,14 @@ const CameraViewfinder = () => {
 					>
 						Retake
 					</Text>
-					<Text style={{ color: "#FFFFFF", fontSize: 16 }}>
+					<Text
+						onPress={() => {
+							router.push(
+								`/explore?uri=${encodeURIComponent(photo.uri)}`
+							);
+						}}
+						style={{ color: "#FFFFFF", fontSize: 16 }}
+					>
 						Submit
 					</Text>
 				</View>
