@@ -1,4 +1,5 @@
 import CameraViewfinder from "@/components/CameraViewfinder";
+import { useColor } from "@/context/ColorContext";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
@@ -6,13 +7,7 @@ import { SafeAreaView, Text, View } from "react-native";
 const HomeScreen = () => {
 	const navigation = useNavigation();
 
-	const [targetColor, setTargetColor] = useState(() => {
-		const red = Math.floor(Math.random() * 255);
-		const green = Math.floor(Math.random() * 255);
-		const blue = Math.floor(Math.random() * 255);
-
-		return { red, green, blue };
-	});
+	const { targetColor } = useColor();
 
 	const fontColor = [
 		targetColor.red,
