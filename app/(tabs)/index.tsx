@@ -1,3 +1,4 @@
+import CameraViewfinder from "@/components/CameraViewfinder";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
@@ -43,7 +44,9 @@ export default function HomeScreen() {
 					borderRadius: 8,
 					marginHorizontal: 8
 				}}
-			/>
+			>
+				<CameraViewfinder />
+			</View>
 		</SafeAreaView>
 	);
 }
