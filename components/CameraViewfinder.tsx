@@ -53,10 +53,36 @@ const CameraViewfinder = () => {
 				/>
 			</CameraView>
 		) : (
-			<Image
-				source={{ uri: photo.uri }}
-				style={{ height: "100%", width: "100%" }}
-			/>
+			<View
+				style={{ position: "relative", width: "100%", height: "100%" }}
+			>
+				<View
+					style={{
+						flexDirection: "row",
+						padding: 16,
+						position: "absolute",
+						top: 0,
+						left: 0,
+						justifyContent: "space-between",
+						zIndex: 1,
+						width: "100%"
+					}}
+				>
+					<Text
+						onPress={() => setPhoto(null)}
+						style={{ color: "#FFFFFF", fontSize: 16 }}
+					>
+						Retake
+					</Text>
+					<Text style={{ color: "#FFFFFF", fontSize: 16 }}>
+						Submit
+					</Text>
+				</View>
+				<Image
+					source={{ uri: photo.uri }}
+					style={{ height: "100%", width: "100%" }}
+				/>
+			</View>
 		);
 	}
 };
