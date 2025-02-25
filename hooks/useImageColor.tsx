@@ -9,7 +9,7 @@ export const useImageColor = () => {
 		blue: number;
 	}>();
 	const [skiaImage, setSkiaImage] = useState();
-	const [score, setScore] = useState<number>();
+	const [score, setScore] = useState<number>(0);
 
 	const calculateScore = (targetColor, userColor) => {
 		const color1 = new Color("srgb", [
