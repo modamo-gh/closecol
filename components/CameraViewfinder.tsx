@@ -1,13 +1,20 @@
+import { useColor } from "@/context/ColorContext";
 import { useTimer } from "@/context/TimerContext";
-import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
-import { router } from "expo-router";
+import { useImageColor } from "@/hooks/useImageColor";
+import { Canvas, useCanvasRef } from "@shopify/react-native-skia";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-const CameraViewfinder = () => {
-	const [permissions, setPermissions] = useCameraPermissions();
-	const cameraRef = useRef(null);
-	const [photo, setPhoto] = useState();
+const CameraViewfinder = ({ hasSubmitted, setHasSubmitted, setTimeSolved }) => {
+	const [canvasSize, setCanvasSize] = useState({ height: 0, width: 0 });
+	const ref = useCanvasRef();
+
+	const { targetColor } = useColor();
+
+	const { averageColor, calculateScore, extractColor, score, skiaImage } =
+		useImageColor();
+
 	const { timeLeft } = useTimer();
 
 	useEffect(() => {
@@ -16,13 +23,7 @@ const CameraViewfinder = () => {
 		}
 	}, []);
 
-	if (!permissions) {
-		return <View />;
-	}
-
-	if (!permissions.granted) {
-		return <Text>Camera permissions are needed</Text>;
-	}
+	
 
 	const takePicture = async () => {
 		if (cameraRef.current) {
@@ -31,16 +32,27 @@ const CameraViewfinder = () => {
 		}
 	};
 
+	const onCanvasLayout = (event) => {
+		const { height, width } = event.nativeEvent.layout;
+
+		setCanvasSize({ height, width });
+
+		console.log({ height, width });
+	};
+
+	useEffect(() => {
+		if (photo && canvasSize.width > 0 && canvasSize.height > 0 &&ref.current) {
+			extractColor(photo.uri, ref);
+		}
+	}, [photo, canvasSize,ref]);
+
+	useEffect(() => {
+		if (averageColor) {
+			calculateScore(targetColor, averageColor);
+		}
+	}, [averageColor]);
 	return (
-		<View
-			style={{
-				backgroundColor: "blue",
-				flex: 8,
-				borderRadius: 8,
-				marginHorizontal: 8,
-				overflow: "hidden"
-			}}
-		>
+		
 			{!photo ? (
 				<CameraView
 					ref={cameraRef}
@@ -70,41 +82,53 @@ const CameraViewfinder = () => {
 						height: "100%"
 					}}
 				>
-					<View
+					{!hasSubmitted && (
+						<View
+							style={{
+								flexDirection: "row",
+								padding: 16,
+								position: "absolute",
+								top: 0,
+								left: 0,
+								justifyContent: "space-between",
+								zIndex: 1,
+								width: "100%"
+							}}
+						>
+							<Text
+								onPress={() => setPhoto(null)}
+								style={{ color: "#FFFFFF", fontSize: 16 }}
+							>
+								Retake
+							</Text>
+							<Text
+								onPress={() => {
+									setTimeSolved(210 - timeLeft);
+									setHasSubmitted(true);
+								}}
+								style={{ color: "#FFFFFF", fontSize: 16 }}
+							>
+								Submit
+							</Text>
+						</View>
+					)}
+					<Canvas
+						onLayout={onCanvasLayout}
+						ref={ref}
 						style={{
-							flexDirection: "row",
-							padding: 16,
-							position: "absolute",
-							top: 0,
-							left: 0,
-							justifyContent: "space-between",
-							zIndex: 1,
-							width: "100%"
+							flex: 1
 						}}
 					>
-						<Text
-							onPress={() => setPhoto(null)}
-							style={{ color: "#FFFFFF", fontSize: 16 }}
-						>
-							Retake
-						</Text>
-						<Text
-							onPress={() =>
-								router.push(
-									`/analysis?uri=${encodeURIComponent(
-										photo.uri
-									)}&timeSolved=${210 - timeLeft}`
-								)
-							}
-							style={{ color: "#FFFFFF", fontSize: 16 }}
-						>
-							Submit
-						</Text>
-					</View>
-					<Image
-						source={{ uri: photo.uri }}
-						style={{ height: "100%", width: "100%" }}
-					/>
+						{skiaImage && (
+							<Image
+								image={skiaImage}
+								height={canvasSize.height}
+								width={canvasSize.width}
+								x={0}
+								y={0}
+							/>
+						)}
+					</Canvas>
 				</View>
 			)}
 		</View>

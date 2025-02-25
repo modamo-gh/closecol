@@ -6,29 +6,14 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
 const AnalysisScreen = () => {
-	const { targetColor } = useColor();
 
 	const { timeSolved, uri } = useLocalSearchParams();
 
-	const { averageColor, calculateScore, extractColor, score, skiaImage } =
-		useImageColor();
-	const ref = useCanvasRef();
 
-	const [canvasSize, setCanvasSize] = useState({ height: 0, width: 0 });
 
-	const onCanvasLayout = (event) => {
-		const { height, width } = event.nativeEvent.layout;
+	
 
-		setCanvasSize({ height, width });
-
-		console.log({ height, width });
-	};
-
-	useEffect(() => {
-		if (uri) {
-			extractColor(uri, ref);
-		}
-	}, [uri]);
+	
 
 	const fontColor = [
 		targetColor.red,
@@ -82,23 +67,7 @@ const AnalysisScreen = () => {
 					overflow: "hidden"
 				}}
 			>
-				<Canvas
-					onLayout={onCanvasLayout}
-					ref={ref}
-					style={{
-						flex: 1
-					}}
-				>
-					{skiaImage && (
-						<Image
-							image={skiaImage}
-							height={canvasSize.height}
-							width={canvasSize.width}
-							x={0}
-							y={0}
-						/>
-					)}
-				</Canvas>
+				
 			</View>
 		</SafeAreaView>
 	);

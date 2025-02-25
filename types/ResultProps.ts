@@ -1,3 +1,3 @@
 export type ResultProps = {
-	timeLeft: number;
+	timeSolved: number;
 };
