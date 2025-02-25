@@ -1,14 +1,14 @@
 import { useColor } from "@/context/ColorContext";
 import { useImageColor } from "@/hooks/useImageColor";
+import { Canvas, Image, useCanvasRef } from "@shopify/react-native-skia";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
-import { Canvas, Image, Rect, useCanvasRef } from "@shopify/react-native-skia";
 
 const AnalysisScreen = () => {
 	const { targetColor } = useColor();
 
-	const { uri } = useLocalSearchParams();
+	const { timeSolved, uri } = useLocalSearchParams();
 
 	const { averageColor, calculateScore, extractColor, score, skiaImage } =
 		useImageColor();
@@ -85,7 +85,12 @@ const AnalysisScreen = () => {
 			>
 				<Text
 					style={{ fontSize: 20, color: fontColor }}
-				>{`Your Score: ${score}`}</Text>
+				>{`Solved in ${Math.floor(
+					Number(timeSolved) / 60
+				)} minutes and ${Number(timeSolved) % 60} seconds`}</Text>
+				<Text
+					style={{ fontSize: 20, color: fontColor }}
+				>{`Your Score: ${(score * (210 - timeSolved)) / 210}`}</Text>
 			</View>
 			<View
 				style={{

@@ -1,3 +1,4 @@
+import { useTimer } from "@/context/TimerContext";
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +9,7 @@ const CameraViewfinder = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
 	const cameraRef = useRef(null);
 	const [photo, setPhoto] = useState();
+	const { timeLeft } = useTimer();
 
 	useEffect(() => {
 		if (!permissions?.granted) {
@@ -75,7 +77,13 @@ const CameraViewfinder = () => {
 						Retake
 					</Text>
 					<Text
-						onPress={() => router.push(`/analysis?uri=${encodeURIComponent(photo.uri)}`)}
+						onPress={() =>
+							router.push(
+								`/analysis?uri=${encodeURIComponent(
+									photo.uri
+								)}&timeSolved=${210 - timeLeft}`
+							)
+						}
 						style={{ color: "#FFFFFF", fontSize: 16 }}
 					>
 						Submit
