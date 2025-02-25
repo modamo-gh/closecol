@@ -1,11 +1,12 @@
-import { useColor } from "@/context/ColorContext";
-import { useImageColor } from "@/hooks/useImageColor";
+import { useImageColor } from "@/context/ImageColorContext";
+import { useTimer } from "@/context/TimerContext";
 import { ResultProps } from "@/types/ResultProps";
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const Result: React.FC<ResultProps> = ({ photo, timeSolved }) => {
+const Result: React.FC<ResultProps> = () => {
 	const { score } = useImageColor();
+	const { timeSolved } = useTimer();
 
 	return (
 		<View style={styles.container}>
@@ -14,9 +15,9 @@ const Result: React.FC<ResultProps> = ({ photo, timeSolved }) => {
 			>{`Solved in ${Math.floor(Number(timeSolved) / 60)} minutes and ${
 				Number(timeSolved) % 60
 			} seconds`}</Text>
-			<Text style={{ fontSize: 20, color: "#000000" }}>{`Your Score: ${
-				score * ((210 - Number(timeSolved)) / 210)
-			}`}</Text>
+			<Text
+				style={{ fontSize: 20, color: "#000000" }}
+			>{`Your Score: ${score}`}</Text>
 		</View>
 	);
 };

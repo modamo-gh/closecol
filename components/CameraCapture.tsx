@@ -1,11 +1,13 @@
+import { usePhotoContext } from "@/context/PhotoContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { useRef } from "react";
+import { Pressable, Text, View } from "react-native";
+import ImageProcessor from "./ImageProcessor";
 
 const CameraCapture = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
-	const [photo, setPhoto] = useState();
 	const cameraRef = useRef(null);
+	const { photo, setPhoto } = usePhotoContext();
 
 	const takePicture = async () => {
 		if (cameraRef.current) {
@@ -54,10 +56,7 @@ const CameraCapture = () => {
 					/>
 				</CameraView>
 			) : (
-				<Image
-					source={{ uri: photo.uri }}
-					style={{ width: "100%", height: "100%" }}
-				/>
+				<ImageProcessor />
 			)}
 		</View>
 	);

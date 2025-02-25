@@ -1,13 +1,12 @@
 import { useColor } from "@/context/ColorContext";
 import { useTimer } from "@/context/TimerContext";
-import { useImageColor } from "@/hooks/useImageColor";
+import { useImageColor } from "@/context/ImageColorContext";
 import { Canvas, useCanvasRef } from "@shopify/react-native-skia";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 const CameraViewfinder = ({ hasSubmitted, setHasSubmitted, setTimeSolved }) => {
-	const [canvasSize, setCanvasSize] = useState({ height: 0, width: 0 });
 	const ref = useCanvasRef();
 
 	const { targetColor } = useColor();
@@ -15,7 +14,6 @@ const CameraViewfinder = ({ hasSubmitted, setHasSubmitted, setTimeSolved }) => {
 	const { averageColor, calculateScore, extractColor, score, skiaImage } =
 		useImageColor();
 
-	const { timeLeft } = useTimer();
 
 	useEffect(() => {
 		if (!permissions?.granted) {
@@ -40,17 +38,9 @@ const CameraViewfinder = ({ hasSubmitted, setHasSubmitted, setTimeSolved }) => {
 		console.log({ height, width });
 	};
 
-	useEffect(() => {
-		if (photo && canvasSize.width > 0 && canvasSize.height > 0 &&ref.current) {
-			extractColor(photo.uri, ref);
-		}
-	}, [photo, canvasSize,ref]);
+	
 
-	useEffect(() => {
-		if (averageColor) {
-			calculateScore(targetColor, averageColor);
-		}
-	}, [averageColor]);
+	
 	return (
 		
 			{!photo ? (

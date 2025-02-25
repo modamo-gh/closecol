@@ -1,15 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const TimerContext = createContext<{
-	timeLeft: number;
-	setTimeLeft: (time: number) => void;
 	isRunning: boolean;
 	setIsRunning: (running: boolean) => void;
+	setTimeLeft: (time: number) => void;
+	setTimeSolved: (time: number) => void;
+	timeLeft: number;
+	timeSolved: number;
 } | null>(null);
 
 export const TimerProvider = ({ children }) => {
 	const [isRunning, setIsRunning] = useState(true);
 	const [timeLeft, setTimeLeft] = useState(210);
+	const [timeSolved, setTimeSolved] = useState(0);
 
 	useEffect(() => {
 		if (isRunning && timeLeft) {
@@ -24,10 +27,12 @@ export const TimerProvider = ({ children }) => {
 	return (
 		<TimerContext.Provider
 			value={{
-				timeLeft,
-				setTimeLeft,
 				isRunning,
-				setIsRunning
+				setIsRunning,
+				setTimeLeft,
+				setTimeSolved,
+				timeLeft,
+				timeSolved
 			}}
 		>
 			{children}

@@ -13,6 +13,8 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ColorProvider } from "@/context/ColorContext";
 import { TimerProvider } from "@/context/TimerContext";
+import { PhotoProvider } from "@/context/PhotoContext";
+import { ImageColorProvider } from "@/context/ImageColorContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,18 +36,20 @@ export default function RootLayout() {
 	}
 
 	return (
-		<TimerProvider>
-			<ColorProvider>
-				<ThemeProvider
-					value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-				>
-					<Stack screenOptions={{ headerShown: false }}>
-						<Stack.Screen name="(tabs)" />
-						<Stack.Screen name="+not-found" />
-					</Stack>
-					<StatusBar style="auto" />
-				</ThemeProvider>
-			</ColorProvider>
-		</TimerProvider>
+		<ImageColorProvider>
+			<PhotoProvider>
+				<TimerProvider>
+					<ColorProvider>
+						<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+							<Stack screenOptions={{ headerShown: false }}>
+								<Stack.Screen name="(tabs)" />
+								<Stack.Screen name="+not-found" />
+							</Stack>
+							<StatusBar style="auto" />
+						</ThemeProvider>
+					</ColorProvider>
+				</TimerProvider>
+			</PhotoProvider>
+		</ImageColorProvider>
 	);
 }
