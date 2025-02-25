@@ -38,7 +38,6 @@ const AnalysisScreen = () => {
 		? "#000000"
 		: "#FFFFFF";
 
-	const color = `rgb(${targetColor.red}, ${targetColor.green}, ${targetColor.blue})`;
 
 	const userColor = `rgb(${averageColor?.red}, ${averageColor?.green}, ${averageColor?.blue})`;
 
@@ -73,25 +72,7 @@ const AnalysisScreen = () => {
 					.padStart(2, "0")
 					.toUpperCase()}`}</Text>
 			</View>
-			<View
-				style={{
-					backgroundColor: userColor,
-					flex: 1,
-					borderRadius: 8,
-					marginHorizontal: 8,
-					alignItems: "center",
-					justifyContent: "center"
-				}}
-			>
-				<Text
-					style={{ fontSize: 20, color: fontColor }}
-				>{`Solved in ${Math.floor(
-					Number(timeSolved) / 60
-				)} minutes and ${Number(timeSolved) % 60} seconds`}</Text>
-				<Text
-					style={{ fontSize: 20, color: fontColor }}
-				>{`Your Score: ${(score * (210 - timeSolved)) / 210}`}</Text>
-			</View>
+			
 			<View
 				style={{
 					backgroundColor: "blue",
