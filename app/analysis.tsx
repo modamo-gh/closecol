@@ -10,7 +10,8 @@ const AnalysisScreen = () => {
 
 	const { uri } = useLocalSearchParams();
 
-	const { averageColor, extractColor, skiaImage } = useImageColor();
+	const { averageColor, calculateScore, extractColor, score, skiaImage } =
+		useImageColor();
 	const ref = useCanvasRef();
 
 	const [canvasSize, setCanvasSize] = useState({ height: 0, width: 0 });
@@ -40,6 +41,12 @@ const AnalysisScreen = () => {
 	const color = `rgb(${targetColor.red}, ${targetColor.green}, ${targetColor.blue})`;
 
 	const userColor = `rgb(${averageColor?.red}, ${averageColor?.green}, ${averageColor?.blue})`;
+
+	useEffect(() => {
+		if (averageColor) {
+			calculateScore(targetColor, averageColor);
+		}
+	}, [averageColor]);
 
 	return (
 		<SafeAreaView style={{ backgroundColor: "purple", flex: 1, gap: 16 }}>
@@ -78,16 +85,7 @@ const AnalysisScreen = () => {
 			>
 				<Text
 					style={{ fontSize: 20, color: fontColor }}
-				>{`Your Avg Color: #${averageColor?.red
-					.toString(16)
-					.padStart(2, "0")
-					.toUpperCase()}${averageColor?.green
-					.toString(16)
-					.padStart(2, "0")
-					.toUpperCase()}${averageColor?.blue
-					.toString(16)
-					.padStart(2, "0")
-					.toUpperCase()}`}</Text>
+				>{`Your Score: ${score}`}</Text>
 			</View>
 			<View
 				style={{

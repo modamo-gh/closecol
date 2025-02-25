@@ -1,7 +1,6 @@
-import { Skia, useImage } from "@shopify/react-native-skia";
+import { Skia } from "@shopify/react-native-skia";
+import Color from "colorjs.io";
 import { useState } from "react";
-import { Image } from "react-native";
-import { blue, green } from "react-native-reanimated/lib/typescript/Colors";
 
 export const useImageColor = () => {
 	const [averageColor, setAverageColor] = useState<{
@@ -9,8 +8,25 @@ export const useImageColor = () => {
 		green: number;
 		blue: number;
 	}>();
-	const [paint, setPaint] = useState();
 	const [skiaImage, setSkiaImage] = useState();
+	const [score, setScore] = useState<number>();
+
+	const calculateScore = (targetColor, userColor) => {
+		const color1 = new Color("srgb", [
+			targetColor.red / 255,
+			targetColor.green / 255,
+			targetColor.blue / 255
+		]);
+		const color2 = new Color("srgb", [
+			userColor.red / 255,
+			userColor.green / 255,
+			userColor.blue / 255
+		]);
+
+		const deltaE = color1.deltaE2000(color2);
+
+		setScore(deltaE);
+	};
 
 	const extractColor = async (imageURI: string, canvasRef) => {
 		if (!canvasRef.current) {
@@ -23,8 +39,6 @@ export const useImageColor = () => {
 		setSkiaImage(skImage);
 
 		if (skImage) {
-			const height = skImage.height();
-			const width = skImage.width();
 			const pixelData = skImage.readPixels();
 
 			let totalR = 0;
@@ -52,5 +66,5 @@ export const useImageColor = () => {
 		}
 	};
 
-	return { averageColor, extractColor, skiaImage };
+	return { averageColor, calculateScore, extractColor, score, skiaImage };
 };
