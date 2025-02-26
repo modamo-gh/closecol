@@ -6,7 +6,7 @@ import ImageProcessor from "./ImageProcessor";
 
 const CameraCapture = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
-	const cameraRef = useRef(null);
+	const cameraRef = useRef<CameraView | null>(null);
 	const { photo, setPhoto } = usePhotoContext();
 
 	const takePicture = async () => {
