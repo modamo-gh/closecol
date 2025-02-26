@@ -36,6 +36,7 @@ const CameraCapture = () => {
 		>
 			{!photo ? (
 				<CameraView
+					autofocus="on"
 					ref={cameraRef}
 					style={{
 						borderRadius: 8,
