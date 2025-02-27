@@ -1,15 +1,13 @@
 import { usePhotoContext } from "@/context/PhotoContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { useSharedValue, withTiming } from "react-native-reanimated";
+import { useSharedValue } from "react-native-reanimated";
 import ImageProcessor from "./ImageProcessor";
 
 const CameraCapture = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
-	const { photo, setPhoto } = usePhotoContext();
-	const cameraRef = useRef<CameraView | null>(null);
+	const {cameraRef, capturePhoto, photo } = usePhotoContext();
 
 	const zoom = useSharedValue(0);
 	const startScale = useSharedValue(1);
@@ -30,13 +28,6 @@ const CameraCapture = () => {
 			startScale.value = e.scale;
 		});
 
-	const takePicture = async () => {
-		if (cameraRef.current) {
-			const p = await cameraRef.current.takePictureAsync();
-			setPhoto(p);
-		}
-	};
-
 	if (!permissions) {
 		return <View />;
 	}
@@ -50,7 +41,7 @@ const CameraCapture = () => {
 			<View
 				style={{
 					backgroundColor: "blue",
-					flex: 8,
+					flex: 7,
 					borderRadius: 8,
 					marginHorizontal: 8,
 					overflow: "hidden"
@@ -69,7 +60,7 @@ const CameraCapture = () => {
 						zoom={zoom.value}
 					>
 						<Pressable
-							onPress={async () => takePicture()}
+							onPress={capturePhoto}
 							style={{
 								backgroundColor: "#FFFFFF",
 								height: 72,

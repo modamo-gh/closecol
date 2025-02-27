@@ -7,7 +7,7 @@ import { useColor } from "@/context/ColorContext";
 import { usePhotoContext } from "@/context/PhotoContext";
 import { useTimer } from "@/context/TimerContext";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
 
 const HomeScreen = () => {
 	const { hasSubmitted, setHasSubmitted } = usePhotoContext();
@@ -30,6 +30,16 @@ const HomeScreen = () => {
 				<Timer timeLeft={timeLeft} />
 			)}
 			<CameraCapture />
+			<View
+				style={{
+					alignItems: "center",
+					backgroundColor: "#FFFFFF",
+					borderRadius: 8,
+					flex: 1,
+					justifyContent: "center",
+					marginHorizontal: 8
+				}}
+			></View>
 		</SafeAreaView>
 	);
 };
