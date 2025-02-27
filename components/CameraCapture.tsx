@@ -1,6 +1,6 @@
 import { usePhotoContext } from "@/context/PhotoContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useSharedValue, withTiming } from "react-native-reanimated";
@@ -12,13 +12,22 @@ const CameraCapture = () => {
 	const cameraRef = useRef<CameraView | null>(null);
 
 	const zoom = useSharedValue(0);
+	const startScale = useSharedValue(1);
 
 	const pinchGesture = Gesture.Pinch()
-		.onUpdate((e) => {
-			zoom.value = Math.min(Math.max(0, zoom.value + (1 / e.scale - zoom.value) * 0.2), 1);
+		.onStart(() => {
+			startScale.value = 1;
 		})
-		.onEnd(() => {
-			console.log("Final Zoom:", zoom.value); // Debug log
+		.onUpdate((e) => {
+			const scaleFactor = e.scale / startScale.value;
+
+			const zoomDelta = (scaleFactor - 1) * 0.05;
+
+			const newZoom = Math.min(Math.max(0, zoom.value + zoomDelta), 1);
+
+			zoom.value = newZoom;
+
+			startScale.value = e.scale;
 		});
 
 	const takePicture = async () => {
