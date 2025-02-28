@@ -1,3 +1,4 @@
+import Button from "@/components/Button";
 import CameraCapture from "@/components/CameraCapture";
 import Result from "@/components/Result";
 import Timer from "@/components/Timer";
@@ -44,53 +45,20 @@ const HomeScreen = () => {
 				}}
 			>
 				{!photo ? (
-					<Pressable
-						onPress={capturePhoto}
-						style={{
-							alignItems: "center",
-							flex: 1,
-							borderRadius: 8,
-							backgroundColor: "white",
-							height: "100%",
-							justifyContent: "center",
-							width: "100%"
-						}}
-					>
-						<Text style={{ fontSize: 20 }}>Take Picture</Text>
-					</Pressable>
+					<Button onPress={capturePhoto} title="Take Picture" />
 				) : (
 					<>
-						<Pressable
+						<Button
 							onPress={() => setPhoto(null)}
-							style={{
-								alignItems: "center",
-								flex: 1,
-								backgroundColor: "white",
-								borderRadius: 8,
-								height: "100%",
-								justifyContent: "center",
-								width: "100%"
-							}}
-						>
-							<Text style={{ fontSize: 20 }}>Retake</Text>
-						</Pressable>
-						<Pressable
+							title={"Retake"}
+						/>
+						<Button
 							onPress={() => {
 								setTimeSolved(210 - timeLeft);
 								setHasSubmitted(true);
 							}}
-							style={{
-								alignItems: "center",
-								flex: 1,
-								borderRadius: 8,
-								backgroundColor: "white",
-								height: "100%",
-								justifyContent: "center",
-								width: "100%"
-							}}
-						>
-							<Text style={{ fontSize: 20 }}>Submit</Text>
-						</Pressable>
+							title={"Submit"}
+						/>
 					</>
 				)}
 			</View>
