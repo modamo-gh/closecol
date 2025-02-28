@@ -1,16 +1,15 @@
 import CameraCapture from "@/components/CameraCapture";
-import ImageProcessor from "@/components/ImageProcessor";
 import Result from "@/components/Result";
 import Timer from "@/components/Timer";
 import TodaysColor from "@/components/TodaysColor";
 import { useColor } from "@/context/ColorContext";
 import { usePhotoContext } from "@/context/PhotoContext";
 import { useTimer } from "@/context/TimerContext";
-import { useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import { useEffect } from "react";
+import { Pressable, SafeAreaView, Text, View } from "react-native";
 
 const HomeScreen = () => {
-	const { hasSubmitted, setHasSubmitted } = usePhotoContext();
+	const { capturePhoto, hasSubmitted, setHasSubmitted } = usePhotoContext();
 	const { targetColor } = useColor();
 	const { setTimeSolved, timeLeft, timeSolved } = useTimer();
 
@@ -35,11 +34,25 @@ const HomeScreen = () => {
 					alignItems: "center",
 					backgroundColor: "#FFFFFF",
 					borderRadius: 8,
+					display: "flex",
 					flex: 1,
 					justifyContent: "center",
-					marginHorizontal: 8
+					marginHorizontal: 8,
+					overflow: "hidden"
 				}}
-			></View>
+			>
+				<Pressable
+					onPress={capturePhoto}
+					style={{
+						alignItems: "center",
+						height: "100%",
+						justifyContent: "center",
+						width: "100%"
+					}}
+				>
+					<Text style={{ fontSize: 20 }}>Take Picture</Text>
+				</Pressable>
+			</View>
 		</SafeAreaView>
 	);
 };

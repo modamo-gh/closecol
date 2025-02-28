@@ -7,7 +7,7 @@ import ImageProcessor from "./ImageProcessor";
 
 const CameraCapture = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
-	const {cameraRef, capturePhoto, photo } = usePhotoContext();
+	const { cameraRef, capturePhoto, photo } = usePhotoContext();
 
 	const zoom = useSharedValue(0);
 	const startScale = useSharedValue(1);
@@ -58,18 +58,7 @@ const CameraCapture = () => {
 							justifyContent: "flex-end"
 						}}
 						zoom={zoom.value}
-					>
-						<Pressable
-							onPress={capturePhoto}
-							style={{
-								backgroundColor: "#FFFFFF",
-								height: 72,
-								width: 72,
-								borderRadius: 50,
-								marginBottom: 16
-							}}
-						/>
-					</CameraView>
+					/>
 				) : (
 					<ImageProcessor />
 				)}
