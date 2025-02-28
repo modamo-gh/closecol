@@ -9,7 +9,8 @@ import { useEffect } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 
 const HomeScreen = () => {
-	const { capturePhoto, hasSubmitted, setHasSubmitted } = usePhotoContext();
+	const { capturePhoto, hasSubmitted, photo, setHasSubmitted, setPhoto } =
+		usePhotoContext();
 	const { targetColor } = useColor();
 	const { setTimeSolved, timeLeft, timeSolved } = useTimer();
 
@@ -32,26 +33,66 @@ const HomeScreen = () => {
 			<View
 				style={{
 					alignItems: "center",
-					backgroundColor: "#FFFFFF",
 					borderRadius: 8,
 					display: "flex",
 					flex: 1,
-					justifyContent: "center",
+					flexDirection: "row",
+					gap: 8,
+					justifyContent: "space-between",
 					marginHorizontal: 8,
 					overflow: "hidden"
 				}}
 			>
-				<Pressable
-					onPress={capturePhoto}
-					style={{
-						alignItems: "center",
-						height: "100%",
-						justifyContent: "center",
-						width: "100%"
-					}}
-				>
-					<Text style={{ fontSize: 20 }}>Take Picture</Text>
-				</Pressable>
+				{!photo ? (
+					<Pressable
+						onPress={capturePhoto}
+						style={{
+							alignItems: "center",
+							flex: 1,
+							borderRadius: 8,
+							backgroundColor: "white",
+							height: "100%",
+							justifyContent: "center",
+							width: "100%"
+						}}
+					>
+						<Text style={{ fontSize: 20 }}>Take Picture</Text>
+					</Pressable>
+				) : (
+					<>
+						<Pressable
+							onPress={() => setPhoto(null)}
+							style={{
+								alignItems: "center",
+								flex: 1,
+								backgroundColor: "white",
+								borderRadius: 8,
+								height: "100%",
+								justifyContent: "center",
+								width: "100%"
+							}}
+						>
+							<Text style={{ fontSize: 20 }}>Retake</Text>
+						</Pressable>
+						<Pressable
+							onPress={() => {
+								setTimeSolved(210 - timeLeft);
+								setHasSubmitted(true);
+							}}
+							style={{
+								alignItems: "center",
+								flex: 1,
+								borderRadius: 8,
+								backgroundColor: "white",
+								height: "100%",
+								justifyContent: "center",
+								width: "100%"
+							}}
+						>
+							<Text style={{ fontSize: 20 }}>Submit</Text>
+						</Pressable>
+					</>
+				)}
 			</View>
 		</SafeAreaView>
 	);

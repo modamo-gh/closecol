@@ -1,13 +1,13 @@
 import { usePhotoContext } from "@/context/PhotoContext";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useSharedValue } from "react-native-reanimated";
 import ImageProcessor from "./ImageProcessor";
 
 const CameraCapture = () => {
 	const [permissions, setPermissions] = useCameraPermissions();
-	const { cameraRef, capturePhoto, photo } = usePhotoContext();
+	const { cameraRef, photo } = usePhotoContext();
 
 	const zoom = useSharedValue(0);
 	const startScale = useSharedValue(1);
@@ -40,7 +40,6 @@ const CameraCapture = () => {
 		<GestureDetector gesture={pinchGesture}>
 			<View
 				style={{
-					backgroundColor: "blue",
 					flex: 7,
 					borderRadius: 8,
 					marginHorizontal: 8,
