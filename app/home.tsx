@@ -6,8 +6,10 @@ import TodaysColor from "@/components/TodaysColor";
 import { useColor } from "@/context/ColorContext";
 import { usePhotoContext } from "@/context/PhotoContext";
 import { useTimer } from "@/context/TimerContext";
+import { Camera } from "expo-camera";
 import { useEffect } from "react";
-import { Pressable, SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, View } from "react-native";
+import Share from "react-native-share";
 
 const HomeScreen = () => {
 	const { capturePhoto, hasSubmitted, photo, setHasSubmitted, setPhoto } =
@@ -15,12 +17,39 @@ const HomeScreen = () => {
 	const { targetColor } = useColor();
 	const { setTimeSolved, timeLeft, timeSolved } = useTimer();
 
+	const requestCameraPermissions = async () => {
+		const { status } = await Camera.requestCameraPermissionsAsync();
+
+		if (status !== "granted") {
+			alert("Camera access is required to take pictures");
+		}
+	};
+
+	const shareImage = async (photoUri) => {
+		const shareOptions = {
+			title: "Share your color match!", // Title for the share popup
+			message: "Check out my color match on Close Col! 🎨✨", // Custom message
+			url: photoUri, // The image file URI
+			type: "image/jpeg" // Ensure correct format
+		};
+
+		try {
+			await Share.open(shareOptions);
+		} catch (error) {
+			console.log("Error sharing:", error);
+		}
+	};
+
 	useEffect(() => {
 		if (!timeLeft && !hasSubmitted) {
 			setHasSubmitted(true);
 			setTimeSolved(0);
 		}
 	}, [timeLeft, hasSubmitted]);
+
+	useEffect(() => {
+		requestCameraPermissions();
+	}, []);
 
 	return (
 		<SafeAreaView style={{ backgroundColor: "purple", flex: 1, gap: 16 }}>
@@ -46,6 +75,11 @@ const HomeScreen = () => {
 			>
 				{!photo ? (
 					<Button onPress={capturePhoto} title="Take Picture" />
+				) : hasSubmitted ? (
+					<Button
+						onPress={() => shareImage(photo.uri)}
+						title={"Share"}
+					/>
 				) : (
 					<>
 						<Button
