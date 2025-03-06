@@ -17,7 +17,7 @@ const Result: React.FC<ResultProps> = () => {
 			} seconds`}</Text>
 			<Text
 				style={{ fontSize: 20, color: "#000000" }}
-			>{`Your Score: ${score}`}</Text>
+			>{`Your Score: ${Math.round(score)}`}</Text>
 		</View>
 	);
 };

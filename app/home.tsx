@@ -4,6 +4,7 @@ import Result from "@/components/Result";
 import Timer from "@/components/Timer";
 import TodaysColor from "@/components/TodaysColor";
 import { useColor } from "@/context/ColorContext";
+import { useImageColor } from "@/context/ImageColorContext";
 import { usePhotoContext } from "@/context/PhotoContext";
 import { useTimer } from "@/context/TimerContext";
 import { Camera } from "expo-camera";
@@ -12,6 +13,7 @@ import { SafeAreaView, View } from "react-native";
 import Share from "react-native-share";
 
 const HomeScreen = () => {
+	const { score } = useImageColor();
 	const { capturePhoto, hasSubmitted, photo, setHasSubmitted, setPhoto } =
 		usePhotoContext();
 	const { targetColor } = useColor();
@@ -25,12 +27,17 @@ const HomeScreen = () => {
 		}
 	};
 
-	const shareImage = async (photoUri) => {
+	const shareImage = async (photoUri: string) => {
 		const shareOptions = {
-			title: "Share your color match!", // Title for the share popup
-			message: "Check out my color match on Close Col! 🎨✨", // Custom message
-			url: photoUri, // The image file URI
-			type: "image/jpeg" // Ensure correct format
+			title: "Share your color match!",
+			message: `That was a #CloseCol! I scored ${Math.round(score)} in ${
+				timeSolved >= 60
+					? `${Math.floor(Number(timeSolved) / 60)} minutes and`
+					: null
+			}
+			${Number(timeSolved) % 60} seconds. Think you can beat me? 🔥🎨`,
+			url: photoUri,
+			type: "image/jpeg"
 		};
 
 		try {
