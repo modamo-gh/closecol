@@ -32,10 +32,9 @@ const HomeScreen = () => {
 			title: "Share your color match!",
 			message: `That was a #CloseCol! I scored ${Math.round(score)} in ${
 				timeSolved >= 60
-					? `${Math.floor(Number(timeSolved) / 60)} minutes and`
-					: null
-			}
-			${Number(timeSolved) % 60} seconds. Think you can beat me? 🔥🎨`,
+					? `${Math.floor(Number(timeSolved) / 60)} minutes and `
+					: ""
+			}${Number(timeSolved) % 60} seconds. Think you can beat me? 🔥🎨`,
 			url: photoUri,
 			type: "image/jpeg"
 		};
